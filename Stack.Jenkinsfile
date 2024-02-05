@@ -25,6 +25,8 @@ pipeline {
                         sh 'terraform init'
                         // Aplica o Terraform com aprovação automática
                         sh 'terraform apply -auto-approve'
+                        //Destroy
+                        sh 'terraform destroy -auto-approve'
                     }
                 }
             }
