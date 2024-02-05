@@ -6,7 +6,6 @@ pipeline {
         stage ("Checkout source") {
             steps {
                 git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
-                sh 'ls' // Lista arquivos no diretório atual para verificação
             }   
         }
 
@@ -25,7 +24,7 @@ pipeline {
                         // Inicialização do Terraform
                         sh 'terraform init'
                         // Aplica o Terraform com aprovação automática
-                       // sh 'terraform apply -auto-approve'
+                        sh 'terraform apply -auto-approve'
                     }
                 }
             }
