@@ -23,8 +23,13 @@ pipeline {
                     dir('terraform') {
                         // Inicialização do Terraform
                         sh 'terraform init'
-                        // Aplica o Terraform com aprovação automática
-                         sh 'terraform plan'
+                        sh '''
+                        terraform plan \
+                          -var="AWS_DEFAULT_REGION=us-east-1" \
+                          -var="ami_id=ami-0c02fb55956c7d316" \
+                          -var="subnet_ids=[\\"subnet-12345abcde\\", \\"subnet-67890fghij\\"]" \
+                          -var="vpc_id=vpc-12345678"
+                        '''
                         // Destroy
                         // sh 'terraform destroy -auto-approve'
                     }
