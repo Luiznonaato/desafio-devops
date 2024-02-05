@@ -13,12 +13,12 @@ pipeline {
 
         stage ("Execução do terraform") {
 
-            enviroment  {
+            environment  {
                 AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
                 AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
                 AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
             }
-            
+
             steps{
 
                 script {
