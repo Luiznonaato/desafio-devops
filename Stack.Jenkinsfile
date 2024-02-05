@@ -10,5 +10,13 @@ pipeline {
                 sh 'ls'
             }   
         }
+
+        stage ("Execução do terraform") {
+
+            script {
+                sh 'terraform init'
+                sh 'terraform apply'
+            }
+        }
     }
 }
