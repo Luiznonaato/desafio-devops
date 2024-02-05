@@ -25,7 +25,7 @@ pipeline {
                         // Inicialização do Terraform
                         sh 'terraform init'
                         // Aplica o Terraform com aprovação automática
-                        sh 'terraform apply -auto-approve'
+                       // sh 'terraform apply -auto-approve'
                     }
                 }
             }
