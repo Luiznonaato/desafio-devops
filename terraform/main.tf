@@ -1,60 +1,113 @@
-# Criação da VPC
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
-  enable_dns_hostnames = true
+# Cluster ECS
+resource "aws_ecs_cluster" "cluster" {
+  name = "meu-cluster-ecs"
+}
 
-  tags = {
-    Name = "${var.project_name}-vpc"
+# Security Group para o ALB e ECS
+resource "aws_security_group" "sg" {
+  vpc_id = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-# Subnet
-resource "aws_subnet" "my_subnet" {
-  vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = "10.0.1.0/24"
+# Application Load Balancer
+resource "aws_lb" "alb" {
+  name               = "meu-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.sg.id]
+  subnets            = var.subnet_ids
+}
 
-  tags = {
-    Name = "${var.project_name}-subnet"
+resource "aws_lb_target_group" "ecs_target_group" {
+  name     = "ecs-target-group"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    enabled             = true
+    path                = "/actuator/health"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
   }
 }
 
-# Gateway
-resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 8080
+  protocol          = "HTTP"
 
-  tags = {
-    Name = "${var.project_name}-igw"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_target_group.arn
   }
 }
 
-# Tabela de Rotas
-resource "aws_route_table" "my_route_table" {
-  vpc_id = aws_vpc.my_vpc.id
+# Launch Template para instâncias ECS
+resource "aws_launch_template" "ecs_launch_template" {
+  name_prefix   = "ecs-launch-template-"
+  image_id      = var.ami_id
+  instance_type = "t3.medium" 
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my_igw.id
-  }
+  user_data = base64encode(<<-EOF
+                            #!/bin/bash
+                            echo ECS_CLUSTER=${aws_ecs_cluster.cluster.name} >> /etc/ecs/ecs.config
+                            EOF)
 
-  tags = {
-    Name = "${var.project_name}-route-table"
-  }
-}
-
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.my_subnet.id
-  route_table_id = aws_route_table.my_route_table.id
-}
-
-# Instância EC2
-resource "aws_instance" "my_instance" {
-  ami           = "ami-0c02fb55956c7d316" # Ubuntu Server 20.04 LTS (ami pode variar por região)
-  instance_type = var.instance_type
-  subnet_id     = aws_subnet.my_subnet.id
-
-  tags = {
-    Name = "${var.project_name}-instance"
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
+# Auto Scaling Group
+resource "aws_autoscaling_group" "ecs_asg" {
+  launch_template {
+    id      = aws_launch_template.ecs_launch_template.id
+    version = "$Latest"
+  }
+
+  min_size         = 1
+  max_size         = 10
+  desired_capacity = 1
+  vpc_zone_identifier = var.subnet_ids
+
+  tag {
+    key                 = "Name"
+    value               = "ECS Instance"
+    propagate_at_launch = true
+  }
+}
+
+# Registro DNS no Route53
+resource "aws_route53_record" "dns" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = var.app_dns_name
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.alb.dns_name
+    zone_id                = aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
+data "aws_route53_zone" "selected" {
+  name         = "bluesoft.com.br."
+}
