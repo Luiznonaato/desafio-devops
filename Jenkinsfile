@@ -1,42 +1,68 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        IMAGE_TAG = 'latest'
+        // As variáveis abaixo serão definidas dinamicamente com base nos outputs do Terraform
+        ECR_REGISTRY_URL = ''
+        ECS_CLUSTER_NAME = ''
+        ECS_SERVICE_NAME = ''
+    }
 
-        stage ("Checkout source") {
+    stages {
+        stage("Checkout source") {
             steps {
                 git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
-            }   
+            }
         }
 
-        stage ("Execução do terraform") {
-            environment {
-                // Define as variáveis de ambiente para a autenticação da AWS
-                AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
-                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-                PATH = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
-            }
+        stage("Execução do terraform") {
             steps {
                 script {
-                    // Muda para o diretório 'terraform' antes de executar os comandos
                     dir('terraform') {
-                        // Inicialização do Terraform
                         sh 'terraform init'
-                        // Plano de execuçao (build)
-                        sh '''
-                        terraform plan \
-                          -var="ecr_repository_name=repositorio" \
-                          -var="AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" \
-                          -var="ami_id=ami-0c02fb55956c7d316" \
-                          -var='subnet_ids=["subnet-12345abcde", "subnet-67890fghij"]' \
-                          -var="vpc_id=vpc-12345678"
-                        '''
-                        // Inicio execuçao (deploy)
-                        // terraform apply -var="ecr_repository_name=meu-nome-de-repositorio-customizado"
-                        // Destroy
-                        // sh 'terraform destroy -auto-approve'
+                        sh 'terraform apply -auto-approve'
+                        // Captura os outputs do Terraform
+                        script {
+                            ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
+                            ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
+                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
+                        }
                     }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Constrói a imagem Docker e a taggeia para o repositório ECR
+                    sh "docker build -t ${ECR_REGISTRY_URL}:${IMAGE_TAG} ."
+                }
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    // Faz login no Amazon ECR
+                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}"
+                    // Faz push da imagem para o repositório ECR
+                    sh "docker push ${ECR_REGISTRY_URL}:${IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Update ECS Service') {
+            steps {
+                script {
+                    // Atualiza o serviço ECS para usar a nova imagem Docker
+                    sh """
+                    aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
+                    """
                 }
             }
         }
