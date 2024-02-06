@@ -29,7 +29,7 @@ pipeline {
                             // Inicializa o Terraform
                             sh 'terraform init'
                             // Aplica as configurações do Terraform, criando ou atualizando recursos
-                            sh 'terraform apply -auto-approve -var-file="terraform.tfvars" -var="image_tag=${params.IMAGE_TAG}"'
+                            sh 'terraform apply -auto-approve -var="image_tag=${params.IMAGE_TAG}"'
                             // Captura os outputs do Terraform e armazena em variáveis de ambiente
                             env.VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                             env.SUBNET_ID = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
