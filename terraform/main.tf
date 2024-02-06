@@ -106,12 +106,11 @@ resource "aws_ecs_service" "meu_servico_ecs" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [aws_subnet.minha_subnet_a.id]
+    subnets         = [aws_subnet.subnet_id_a.id] # Corrigido aqui
     security_groups = [aws_security_group.sg.id]
     assign_public_ip = true
   }
 }
-
 # Cluster ECS
 resource "aws_ecs_cluster" "cluster" {
   name = "seu-cluster-ecs"  # Substitua pelo nome desejado do cluster ECS
@@ -137,7 +136,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg.id]
-  subnets            = [aws_subnet.minha_subnet_a.id]
+  subnets            = [aws_subnet.subnet_id_a.id] # Corrigido aqui
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
@@ -203,8 +202,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   min_size             = 1
   max_size             = 10
   desired_capacity     = 1
-  vpc_zone_identifier  = aws_subnet.minha_subnet_a.id
-
+  vpc_zone_identifier  = [aws_subnet.subnet_id_a.id] # Corrigido aqui
 
   tag {
     key                 = "Server-app"
