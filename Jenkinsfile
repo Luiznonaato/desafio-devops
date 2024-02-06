@@ -13,6 +13,7 @@ pipeline {
         ECS_SERVICE_NAME = ''
         VPC_ID = ''
         SUBNET_ID = ''
+        AMI_ID = ''
     }
 
     stages {
@@ -35,18 +36,21 @@ pipeline {
                             // O comando terraform output -raw é utilizado para capturar o valor de cada output
                             VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                             SUBNET_ID = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
+                            AMI_ID = sh(script: "terraform output -raw ami_id", returnStdout: true).trim()
                             ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                             ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
                             
                             // Armazena os valores capturados em variáveis de ambiente para uso posterior
                             env.VPC_ID = VPC_ID
                             env.SUBNET_ID = SUBNET_ID
+                            env.AMI_ID = AMI_ID
                             env.ECS_SERVICE_NAME = ECS_SERVICE_NAME
                             env.ECR_REGISTRY_URL = ECR_REGISTRY_URL
         
                             // Opcional: Exibe os valores capturados no log do Jenkins para verificação
                             echo "Captured VPC ID: ${env.VPC_ID}"
                             echo "Captured SUBNET ID ID: ${env.SUBNET_ID}"
+                            echo "Captured AMI ID ID: ${env.AMI_ID}"
                             echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                             echo "Captured ECR Repository URL: ${env.ECR_REPOSITORY_URL}"
                         }
