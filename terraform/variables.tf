@@ -10,11 +10,15 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_id" {
+variable "subnet_id_a" {
   description = "Lista de IDs das subnets para o ALB e instâncias EC2"
-  type        = list(string)
+  type        = string
 }
 
+variable "subnet_id_b" {
+  description = "Lista de IDs das subnets para o ALB e instâncias EC2"
+  type        = string
+}
 
 variable "ami_id" {
   description = "AMI ID para as instâncias EC2"

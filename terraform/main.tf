@@ -13,7 +13,7 @@ output "vpc_id" {
 }
 
 # Subnet
-resource "aws_subnet" "minha_subnet_a" {
+resource "aws_subnet" "subnet_id_a" {
   vpc_id            = aws_vpc.meu_vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
@@ -24,7 +24,7 @@ resource "aws_subnet" "minha_subnet_a" {
   }
 }
 
-resource "aws_subnet" "minha_subnet_b" {
+resource "aws_subnet" "subnet_id_b" {
   vpc_id            = aws_vpc.meu_vpc.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1b"
@@ -36,7 +36,10 @@ resource "aws_subnet" "minha_subnet_b" {
 }
 
 # Output para a Subnet
-output "subnet_id" {
+output "subnet_id_a" {
+  value = aws_subnet.minha_subnet.id
+}
+output "subnet_id_b" {
   value = aws_subnet.minha_subnet.id
 }
 
@@ -213,7 +216,8 @@ resource "aws_autoscaling_group" "ecs_asg" {
   min_size             = 1
   max_size             = 10
   desired_capacity     = 1
-  vpc_zone_identifier  = var.subnet_id
+  vpc_zone_identifier  = subnet_id_a
+
 
   tag {
     key                 = "Server-app"
