@@ -25,17 +25,23 @@ pipeline {
                 script {
                     dir('terraform') {
                         sh 'terraform init'
-                        sh 'terraform apply -auto-approve'
+                        // Assegura a passagem das variáveis de ambiente para o Terraform. Substitua pelos nomes corretos conforme necessário.
+                        sh """
+                        terraform apply -auto-approve \\
+                          -var 'AWS_DEFAULT_REGION=\${AWS_DEFAULT_REGION}' \\
+                          -var 'vpc_id=\${VPC_ID}' \\
+                          -var 'subnet_ids=[\${SUBNET_IDS}]' \\
+                          -var 'ami_id=\${AMI_ID}'
+                        """
                         // Captura os outputs do Terraform
-                        script {
-                            ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
-                            ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
-                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
-                        }
+                        ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
+                        ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
+                        ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                     }
                 }
             }
         }
+
 
         stage('Build Docker Image') {
             steps {
