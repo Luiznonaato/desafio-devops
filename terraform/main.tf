@@ -188,7 +188,7 @@ resource "aws_launch_template" "ecs_launch_template" {
 }
 
 output "aami_id" {
-  value = var.aami_id
+  value       = var.aami_id
   description = "O AMI ID usado para instâncias EC2"
 }
 
