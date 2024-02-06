@@ -189,10 +189,10 @@ resource "aws_autoscaling_group" "ecs_asg" {
     version = "$Latest"
   }
 
-  min_size         = 1
-  max_size         = 10
-  desired_capacity = 1
-  vpc_zone_identifier = var.subnet_id
+  min_size             = 1
+  max_size             = 10
+  desired_capacity     = 1
+  vpc_zone_identifier  = var.subnet_id
 
   tag {
     key                 = "Server-app"
@@ -200,6 +200,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
     propagate_at_launch = true
   }
 }
+
 
 /*
 
