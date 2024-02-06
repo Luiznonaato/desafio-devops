@@ -2,30 +2,49 @@ pipeline {
     agent any
 
     environment {
-        // Defina suas variáveis de ambiente para autenticação AWS
         AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        PATH = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
+        // Variáveis dinâmicas, definidas pelos outputs do Terraform
+        ECR_REGISTRY_URL = ''
+        ECS_CLUSTER_NAME = ''
+        ECS_SERVICE_NAME = '' // Adicionado para o nome do serviço ECS
+        IMAGE_TAG = 'latest'
     }
 
     stages {
-        stage('Checkout Terraform Configs') {
+        stage ("Checkout source") {
             steps {
-                // Checkout do seu repositório com os arquivos Terraform
                 git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
+            }   
+        }
+
+        stage ("Execução do terraform") {
+            steps {
+                script {
+                    dir('terraform') {
+                        sh 'terraform init'
+                        sh 'terraform apply -auto-approve'
+                        // Captura os outputs do Terraform
+                        script {
+                            ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
+                            ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
+                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim() // Captura o nome do serviço ECS
+                        }
+                    }
+                }
             }
         }
 
-        stage('Destroy Infrastructure') {
+        // Stages de Build e Push da imagem Docker...
+
+        stage('Update ECS Service') {
             steps {
                 script {
-                    dir('caminho/para/seus/arquivos/terraform') {
-                        // Inicializa o Terraform
-                        sh 'terraform init'
-                        // Executa terraform destroy sem necessidade de confirmação manual
-                        sh 'terraform destroy -auto-approve'
-                    }
+                    // Atualiza o serviço ECS para usar a nova imagem Docker
+                    sh """
+                    aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
+                    """
                 }
             }
         }
