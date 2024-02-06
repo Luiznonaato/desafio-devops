@@ -26,7 +26,7 @@ pipeline {
                         // Plano de execuçao (build)
                         sh '''
                         terraform plan \
-                          -var="ecr_repository_name=repositorio \
+                          -var="ecr_repository_name=repositorio" \
                           -var="AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" \
                           -var="ami_id=ami-0c02fb55956c7d316" \
                           -var='subnet_ids=["subnet-12345abcde", "subnet-67890fghij"]' \
