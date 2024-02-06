@@ -8,7 +8,7 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_ids" {
+variable "subnet_id" {
   description = "Lista de IDs das subnets para o ALB e instâncias EC2"
   type        = list(string)
 }
