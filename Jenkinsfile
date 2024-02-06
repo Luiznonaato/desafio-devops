@@ -87,11 +87,12 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Constrói a imagem Docker e a taggeia para o repositório ECR
-                    sh "docker build -t ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG} ."
+                    // Constrói a imagem Docker e a taggeia para o repositório ECR usando o caminho completo do executável do Docker
+                    sh "/Users/luiznonato/.docker/bin/docker build -t ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG} ."
                 }
             }
         }
+
 
         stage('Push Docker Image to ECR') {
             steps {
@@ -103,7 +104,7 @@ pipeline {
                     ]) {
                         sh "aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
                         // Faz push da imagem para o repositório ECR
-                        sh "docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
+                        sh "/Users/luiznonato/.docker/bin/docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
                     }
                 }
             }
