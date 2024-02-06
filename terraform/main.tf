@@ -147,7 +147,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg.id]
-  subnets            = var.subnet_id
+  subnets            = [aws_subnet.minha_subnet_a.id, aws_subnet.minha_subnet_b.id]
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
