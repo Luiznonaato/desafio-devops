@@ -43,7 +43,7 @@ pipeline {
                                 // Prepara um plano de execução do Terraform usando os outputs capturados
                                 // Nota: Substitua ou adicione outras variáveis conforme necessário
                                 sh "terraform plan -var='vpc_id=${env.VPC_ID}' -var='subnet_id=${env.SUBNET_ID}' -var='ami_id=${env.AMI_ID}'"
-                            }
+                            
                             
                             // Aplica as configurações do Terraform, criando ou atualizando recursos
                             //sh 'terraform apply -auto-approve -var-file="terraform.tfvars"'
@@ -98,4 +98,5 @@ pipeline {
             }
         }
     }
+}
 
