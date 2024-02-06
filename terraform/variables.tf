@@ -15,11 +15,6 @@ variable "subnet_id_a" {
   type        = string
 }
 
-variable "subnet_id_b" {
-  description = "Lista de IDs das subnets para o ALB e instâncias EC2"
-  type        = string
-}
-
 variable "ami_id" {
   description = "AMI ID para as instâncias EC2"
   type        = string
