@@ -26,7 +26,7 @@ resource "aws_subnet" "subnet_id_a" {
 }
 
 # Output para a Subnet
-output "subnet_id_a" {
+output "subnet_id" {
   value = aws_subnet.subnet_id_a.id
 }
 
