@@ -5,6 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        PATH = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
         IMAGE_TAG = 'latest'
         // As variáveis abaixo serão definidas dinamicamente com base nos outputs do Terraform
         ECR_REGISTRY_URL = ''
