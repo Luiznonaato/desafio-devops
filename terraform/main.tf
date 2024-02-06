@@ -3,6 +3,16 @@ resource "aws_ecs_cluster" "cluster" {
   name = "meu-cluster-ecs"
 }
 
+# Respositorio
+resource "aws_ecr_repository" "repositorio" {
+  name                 = var.ecr_repository_name
+  image_tag_mutability = "MUTABLE"
+}
+output "ecr_repository_url" {
+  value = aws_ecr_repository.repositorio.repository_url
+}
+
+
 # Security Group para o ALB e ECS
 resource "aws_security_group" "sg" {
   vpc_id = var.vpc_id
