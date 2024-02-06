@@ -102,8 +102,9 @@ pipeline {
                         [$class: 'StringBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
                         [$class: 'StringBinding', credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']
                     ]) {
-                        sh "aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
-                        // Faz push da imagem para o repositório ECR
+                        // Utiliza o caminho completo para os comandos aws e docker
+                        sh "/usr/local/bin/aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
+                        // Faz push da imagem para o repositório ECR usando o caminho completo do Docker
                         sh "/Users/luiznonato/.docker/bin/docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
                     }
                 }
@@ -114,12 +115,14 @@ pipeline {
             steps {
                 script {
                     // Atualiza o serviço ECS para usar a nova imagem Docker
+                    // Utiliza o caminho completo para o comando aws
                     sh """
-                    aws ecs update-service --cluster ${env.ECS_CLUSTER_NAME} --service ${env.ECS_SERVICE_NAME} --force-new-deployment
+                    /usr/local/bin/aws ecs update-service --cluster ${env.ECS_CLUSTER_NAME} --service ${env.ECS_SERVICE_NAME} --force-new-deployment
                     """
                 }
             }
         }
+
     }
 }
 
