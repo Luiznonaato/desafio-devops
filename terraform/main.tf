@@ -30,13 +30,13 @@ output "subnet_id" {
   value = aws_subnet.subnet_id.id
 }
 
-resource "aws_instance" "aami_id" {
-  ami           = var.aami_id
+resource "aws_instance" "ami_id" {
+  ami           = var.ami_id
   instance_type = "t2.micro"
   // Adicione mais configurações conforme necessário
 }
-output "aami_id" {
-  value       = var.aami_id
+output "ami_id" {
+  value       = var.ami_id
 }
 
 # Security Group para o ALB e ECS
@@ -181,7 +181,7 @@ resource "aws_lb_listener" "front_end" {
 # Launch Template para instâncias ECS
 resource "aws_launch_template" "ecs_launch_template" {
   name_prefix   = "ecs-launch-template-"
-  image_id      = var.aami_id
+  image_id      = var.ami_id
   instance_type = "t3.medium" 
 
   user_data = base64encode(<<-EOF
