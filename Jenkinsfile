@@ -49,7 +49,7 @@ pipeline {
 
                         // Aplica as configurações do Terraform, criando ou atualizando recursos
                         // Assegure-se de que terraform apply é apropriado para o seu fluxo de CI/CD
-                        sh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id_a=${env.SUBNET_ID_A}' -var 'ami_id=${env.AMI_ID}'"
+                        sh "terraform plan -var 'subnet_id_a=${env.SUBNET_ID_A}' -var 'vpc_id=${env.VPC_ID}' -var 'ami_id=${env.AMI_ID}'"
 
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
