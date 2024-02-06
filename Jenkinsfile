@@ -3,6 +3,7 @@ pipeline {
     
     environment {
         // A definição das credenciais AWS será feita no bloco 'withCredentials'
+        AWS_DEFAULT_REGION = 'us-east-1'
         PATH = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
         IMAGE_TAG = 'latest'
     }
