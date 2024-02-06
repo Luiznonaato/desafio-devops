@@ -11,8 +11,9 @@ variable "vpc_id" {
 }
 
 variable "subnet_id_a" {
-  description = "Lista de IDs das subnets para o ALB e instâncias EC2"
+  description = "subnet"
   type        = string
+  default     = aws_subnet.subnet_id_a.id
 }
 
 variable "ami_id" {

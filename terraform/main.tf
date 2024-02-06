@@ -18,6 +18,7 @@ resource "aws_subnet" "subnet_id_a" {
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   map_public_ip_on_launch = true
+  
 
   tags = {
     Name = "subnet_id_a"
@@ -28,7 +29,6 @@ resource "aws_subnet" "subnet_id_a" {
 output "subnet_id_a" {
   value = aws_subnet.subnet_id_a.id
 }
-
 
 
 # Security Group para o ALB e ECS
