@@ -38,13 +38,13 @@ pipeline {
                             
                             // Armazena os valores capturados em variáveis de ambiente para uso posterior
                             env.VPC_ID = vpcId
-                            env.subnet_id = subnetID
+                            env.SUBNET_ID = subnetID
                             env.ECS_SERVICE_NAME = ecsServiceName
                             env.ECR_REPOSITORY_URL = ecrRepositoryUrl
         
                             // Opcional: Exibe os valores capturados no log do Jenkins para verificação
                             echo "Captured VPC ID: ${env.VPC_ID}"
-                            echo "Captured SUBNET ID ID: ${env.subnet_id}"
+                            echo "Captured SUBNET ID ID: ${env.SUBNET_ID}"
                             echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                             echo "Captured ECR Repository URL: ${env.ECR_REPOSITORY_URL}"
                         }
