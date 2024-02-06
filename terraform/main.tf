@@ -24,11 +24,11 @@ resource "aws_subnet" "subnet_id_a" {
   }
 }
 
-
 # Output para a Subnet
 output "subnet_id_a" {
-  value = aws_subnet.minha_subnet.id
+  value = aws_subnet.subnet_id_a.id
 }
+
 
 # Security Group para o ALB e ECS
 resource "aws_security_group" "sg" {
