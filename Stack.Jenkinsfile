@@ -25,11 +25,12 @@ pipeline {
                         sh 'terraform init'
                         sh '''
                         terraform plan \
-                          -var="AWS_DEFAULT_REGION=us-east-1" \
+                          -var="AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}" \
                           -var="ami_id=ami-0c02fb55956c7d316" \
-                          -var="subnet_ids=[\\"subnet-12345abcde\\", \\"subnet-67890fghij\\"]" \
+                          -var='subnet_ids=["subnet-12345abcde", "subnet-67890fghij"]' \
                           -var="vpc_id=vpc-12345678"
                         '''
+
                         // Destroy
                         // sh 'terraform destroy -auto-approve'
                     }
