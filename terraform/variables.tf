@@ -35,3 +35,10 @@ variable "record_name" {
   type        = string
   default     = "desafio-devops.bluesoft.com.br"
 }
+
+variable "ecr_repository_name" {
+  description = "O nome do repositório ECR."
+  type        = string
+  default     = "repositorio" 
+}
+
