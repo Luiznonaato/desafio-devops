@@ -32,7 +32,7 @@ pipeline {
                           -var="vpc_id=vpc-12345678"
                         '''
                         // Inicio execuçao (deploy)
-                        sh 'terraform apply -auto-approve'
+                        //sh 'terraform apply -auto-approve'
                         // Destroy
                         // sh 'terraform destroy -auto-approve'
                     }
