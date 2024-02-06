@@ -12,6 +12,19 @@ output "vpc_id" {
   value = aws_vpc.meu_vpc.id
 }
 
+# Subnet
+resource "aws_subnet" "minha_subnet" {
+  vpc_id                  = aws_vpc.meu_vpc.id
+  cidr_block              = "10.0.0.0/24"  # Subnet CIDR
+  availability_zone       = "us-east-1a"   # Substitua pela zona de disponibilidade desejada
+  map_public_ip_on_launch = true           # Define se as instâncias lançadas nessa subnet terão IPs públicos
+}
+
+# Output para a Subnet
+output "subnet_id" {
+  value = aws_subnet.minha_subnet.id
+}
+
 
 # Cluster ECS
 resource "aws_ecs_service" "meu_servico_ecs" {
