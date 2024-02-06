@@ -126,7 +126,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 output "ecs_service_name" {
-  value = aws_ecs_service.id
+  value = aws_ecs_service.meu_servico_ecs.name
 }
 
 

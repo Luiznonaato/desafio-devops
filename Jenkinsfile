@@ -50,7 +50,7 @@ pipeline {
 
                         // Aplica as configurações do Terraform, criando ou atualizando recursos
                         // Assegure-se de que terraform apply é apropriado para o seu fluxo de CI/CD
-                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
+                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'vpc_id=${env.ECS_SERVICE_NAME}"
                         
                          //-var 'ami_id=${env.ami_id}'
 
