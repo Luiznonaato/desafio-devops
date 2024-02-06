@@ -109,6 +109,6 @@ resource "aws_route53_record" "dns" {
   }
 }
 
-data "aws_route53_zone" "selected" {
-  name         = "bluesoft.com.br."
-}
+//data "aws_route53_zone" "selected" {
+//  name         = "bluesoft.com.br."
+//}
