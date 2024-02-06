@@ -110,11 +110,15 @@ resource "aws_launch_template" "ecs_launch_template" {
   image_id      = var.ami_id
   instance_type = "t3.medium" 
 
-user_data = base64encode(<<-EOF
-#!/bin/bash
-echo ECS_CLUSTER=${aws_ecs_cluster.cluster.name} >> /etc/ecs/ecs.config
-EOF
-)
+  user_data = base64encode(<<-EOF
+  #!/bin/bash
+  echo ECS_CLUSTER=${aws_ecs_cluster.cluster.name} >> /etc/ecs/ecs.config
+  EOF
+  )
+  output "ami_id" {
+    value = var.ami_id
+  }
+
 
   lifecycle {
     create_before_destroy = true
