@@ -8,14 +8,13 @@ variable "AWS_DEFAULT_REGION" {
 variable "vpc_id" {
   description = "O ID da VPC"
   type        = string
-  default     = "vpc-12345678"  
 }
 
 variable "subnet_id" {
   description = "Lista de IDs das subnets para o ALB e instâncias EC2"
   type        = list(string)
-  default     = ["subnet-12345678", "subnet-87654321"]  
 }
+
 
 variable "ami_id" {
   description = "AMI ID para as instâncias EC2"
