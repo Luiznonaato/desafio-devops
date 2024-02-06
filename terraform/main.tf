@@ -1,3 +1,18 @@
+# VPC
+resource "aws_vpc" "meu_vpc" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+  tags = {
+    Name = "MinhaVPC"
+  }
+}
+
+output "vpc_id" {
+  value = aws_vpc.meu_vpc.id
+}
+
+
 # Cluster ECS
 resource "aws_ecs_service" "meu_servico_ecs" {
   name            = "meu-servico-ecs"
