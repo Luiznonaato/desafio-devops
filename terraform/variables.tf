@@ -13,7 +13,7 @@ variable "vpc_id" {
 variable "subnet_id_a" {
   description = "subnet"
   type        = string
-  default     = aws_subnet.subnet_id_a.id
+  default     = "subnetid"
 }
 
 variable "ami_id" {
