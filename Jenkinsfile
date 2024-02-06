@@ -51,6 +51,9 @@ pipeline {
                         // Assegure-se de que terraform apply é apropriado para o seu fluxo de CI/CD
                         sh "terraform plan -var 'subnet_id_a=${env.SUBNET_ID_A}' -var 'vpc_id=${env.VPC_ID}' -var 'ami_id=${env.AMI_ID}'"
 
+                        echo "VPC ID: ${env.VPC_ID}"
+                        echo "Subnet ID A: ${env.SUBNET_ID_A}"
+
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                         def subnetIdA = sh(script: "terraform output -raw subnet_id_a", returnStdout: true).trim()
