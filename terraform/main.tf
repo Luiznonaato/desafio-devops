@@ -25,6 +25,44 @@ output "subnet_id" {
   value = aws_subnet.minha_subnet.id
 }
 
+resource "aws_ecs_task_definition" "meu_task_definition" {
+  family                   = "meu-task-definition"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = "256"
+  memory                   = "512"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+
+  container_definitions = jsonencode([
+    {
+      name      = "meu-container",
+      image     = "seu_repo_docker/sua_imagem:latest",
+      cpu       = 256,
+      memory    = 512,
+      essential = true,
+      portMappings = [
+        {
+          containerPort = 80,
+          hostPort      = 80
+        }
+      ],
+    }
+  ])
+}
+
+resource "aws_ecs_service" "meu_servico_ecs" {
+  name            = "meu-servico-ecs"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.meu_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = [aws_subnet.minha_subnet.id]
+    security_groups = [aws_security_group.sg.id]
+    assign_public_ip = true
+  }
+}
 
 # Cluster ECS
 resource "aws_ecs_cluster" "cluster" {
