@@ -26,7 +26,7 @@ pipeline {
                             // Inicializa o Terraform
                             sh 'terraform init'
                             // Aplica as configurações do Terraform, criando ou atualizando recursos
-                            sh 'terraform apply -auto-approve -var="vpc_id=${vpc_id}" -var="subnet_id=[\\"${subnet_id}\\",\\"${subnet_id}\\"]"'
+                            sh 'terraform apply -auto-approve -var="vpc_id=${VPC_ID}" -var="subnet_id=${SUBNET_ID}"'
                             // Captura os outputs do Terraform e armazena em variáveis de ambiente
                             env.VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                             env.SUBNET_ID = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
