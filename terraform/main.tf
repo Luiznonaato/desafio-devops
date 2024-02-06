@@ -25,6 +25,26 @@ output "subnet_id" {
   value = aws_subnet.minha_subnet.id
 }
 
+# Security Group para o ALB e ECS
+resource "aws_security_group" "sg" {
+  vpc_id = aws_vpc.meu_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs_task_execution_role"
 
@@ -104,26 +124,6 @@ resource "aws_ecr_repository" "repositorio" {
 }
 output "ecr_repository_url" {
   value = aws_ecr_repository.repositorio.repository_url
-}
-
-
-# Security Group para o ALB e ECS
-resource "aws_security_group" "sg" {
-  vpc_id = var.vpc_id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 # Application Load Balancer
