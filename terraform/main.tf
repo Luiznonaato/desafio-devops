@@ -27,9 +27,13 @@ output "subnet_id" {
 
 
 # Cluster ECS
+resource "aws_ecs_cluster" "cluster" {
+  name = "seu-cluster-ecs"  # Substitua pelo nome desejado do cluster ECS
+}
+
 resource "aws_ecs_service" "meu_servico_ecs" {
-  name            = "meu-servico-ecs"
-  cluster         = aws_ecs_cluster.cluster.id
+  name    = "meu-servico-ecs"
+  cluster = aws_ecs_cluster.cluster.id
 }
 
 output "ecs_service_name" {
