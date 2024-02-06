@@ -122,11 +122,11 @@ resource "aws_ecs_service" "meu_servico_ecs" {
 }
 # Cluster ECS
 resource "aws_ecs_cluster" "cluster" {
-  name = "seu-cluster-ecs"  # Substitua pelo nome desejado do cluster ECS
+  name = "meu-cluster-ecs"  # Substitua pelo nome desejado do cluster ECS
 }
 
 output "ecs_service_name" {
-  value = aws_ecs_service.meu_servico_ecs.name
+  value = aws_ecs_service.id
 }
 
 
