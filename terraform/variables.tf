@@ -23,3 +23,15 @@ variable "app_dns_name" {
   type        = string
   default     = "app.bluesoft.com.br"
 }
+
+variable "zone_name" {
+  description = "O nome da zona DNS no Route53."
+  type        = string
+  default     = "bluesoft.com.br."
+}
+
+variable "record_name" {
+  description = "O nome do registro DNS no Route53 para a aplicação."
+  type        = string
+  default     = "desafio-devops.bluesoft.com.br"
+}
