@@ -16,7 +16,7 @@ variable "subnet_id" {
   //default     = "subnetid"
 }
 
-variable "ami_id" {
+variable "aami_id" {
   description = "AMI ID para as instâncias EC2"
   type        = string
   default     = "ami-0277155c3f0ab2930"  

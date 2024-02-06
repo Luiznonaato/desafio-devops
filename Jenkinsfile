@@ -28,20 +28,20 @@ pipeline {
 
 
                         /* Aplica as configurações do Terraform, criando ou atualizando recursos
-                        ssh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id=${env.subnet_id}' -var 'ami_id=${env.AMI_ID}'"
+                        ssh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id=${env.subnet_id}' -var 'aaaami_id=${env.aami_id}'"
 
 
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         env.VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                         env.subnet_id = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
-                        env.AMI_ID = sh(script: "terraform output -raw ami_id", returnStdout: true).trim()
+                        env.aami_id = sh(script: "terraform output -raw aami_id", returnStdout: true).trim()
                         env.ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                         env.ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
 
                         // Opcional: Exibe os valores capturados no log do Jenkins para verificação
                         echo "Captured VPC ID: ${env.VPC_ID}"
                         echo "Captured SUBNET ID A: ${env.subnet_id}"
-                        echo "Captured AMI ID: ${env.AMI_ID}"
+                        echo "Captured AMI ID: ${env.aami_id}"
                         echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                         echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                         */
@@ -49,7 +49,7 @@ pipeline {
 
                         // Aplica as configurações do Terraform, criando ou atualizando recursos
                         // Assegure-se de que terraform apply é apropriado para o seu fluxo de CI/CD
-                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'ami_id=${env.AMI_ID}'"
+                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'aami_id=${env.aami_id}'"
 
                         echo "VPC ID: ${env.VPC_ID}"
                         echo "Subnet ID A: ${env.subnet_id}"
@@ -57,21 +57,21 @@ pipeline {
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                         def subnetIdA = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
-                        def amiId = sh(script: "terraform output -raw ami_id", returnStdout: true).trim()
+                        def amiId = sh(script: "terraform output -raw aami_id", returnStdout: true).trim()
                         def ecsServiceName = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                         def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
 
                         // Define as variáveis de ambiente para uso posterior no pipeline
                         env.VPC_ID = vpcId
                         env.subnet_id = subnetIdA
-                        env.AMI_ID = amiId
+                        env.aami_id = amiId
                         env.ECS_SERVICE_NAME = ecsServiceName
                         env.ECR_REGISTRY_URL = ecrRepositoryUrl
 
                         // Mostra os valores capturados para verificação
                         echo "Captured VPC ID: ${env.VPC_ID}"
                         echo "Captured SUBNET ID A: ${env.subnet_id}"
-                        echo "Captured AMI ID: ${env.AMI_ID}"
+                        echo "Captured AMI ID: ${env.aami_id}"
                         echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                         echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
 

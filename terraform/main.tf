@@ -173,7 +173,7 @@ resource "aws_lb_listener" "front_end" {
 # Launch Template para instâncias ECS
 resource "aws_launch_template" "ecs_launch_template" {
   name_prefix   = "ecs-launch-template-"
-  image_id      = var.ami_id
+  image_id      = var.aami_id
   instance_type = "t3.medium" 
 
   user_data = base64encode(<<-EOF
@@ -187,8 +187,8 @@ resource "aws_launch_template" "ecs_launch_template" {
   }
 }
 
-output "ami_id" {
-  value = var.ami_id
+output "aami_id" {
+  value = var.aami_id
   description = "O AMI ID usado para instâncias EC2"
 }
 
