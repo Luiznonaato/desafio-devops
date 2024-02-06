@@ -115,15 +115,11 @@ pipeline {
         stage('Update ECS Service') {
             steps {
                 script {
-                    // Atualiza o serviço ECS para usar a nova imagem Docker
-                    // Utiliza o caminho completo para o comando aws
-                    sh """
-                    /usr/local/bin/aws ecs update-service --cluster ${env.ECS_CLUSTER_NAME} --service ${env.ECS_SERVICE_NAME} --force-new-deployment
-                    """
+                    // Substitua 'us-east-1' pela região do seu cluster e certifique-se de que ECS_CLUSTER_NAME está definido
+                    sh "/usr/local/bin/aws ecs update-service --region us-east-1 --cluster ${env.ECS_CLUSTER_NAME} --service meu-servico-ecs --force-new-deployment"
                 }
             }
         }
-
     }
 }
 
