@@ -90,7 +90,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   vpc_zone_identifier = var.subnet_ids
 
   tag {
-    key                 = "Name"
+    key                 = "Server-app"
     value               = "ECS Instance"
     propagate_at_launch = true
   }
@@ -114,10 +114,6 @@ resource "aws_route53_record" "desafio_devops" {
     zone_id                = aws_lb.alb.zone_id
     evaluate_target_health = true
   }
-}
-
-data "aws_route53_zone" "selected" {
-  name         = "bluesoft.com.br."
 }
 
 */
