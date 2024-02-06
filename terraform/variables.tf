@@ -1,7 +1,9 @@
 variable "AWS_DEFAULT_REGION" {
   description = "Regiao"
   type        = string
+  default     = "us-east-1"
 }
+
 
 variable "vpc_id" {
   description = "O ID da VPC"
