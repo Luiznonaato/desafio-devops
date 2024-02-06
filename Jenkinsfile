@@ -11,6 +11,8 @@ pipeline {
         ECR_REGISTRY_URL = ''
         ECS_CLUSTER_NAME = ''
         ECS_SERVICE_NAME = ''
+        VPC_ID = ''
+        SUBNET_ID = ''
     }
 
     stages {
@@ -31,16 +33,16 @@ pipeline {
                         // Captura os outputs do Terraform
                         script {
                             // O comando terraform output -raw é utilizado para capturar o valor de cada output
-                            def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
-                            def subnetID = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
-                            def ecsServiceName = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
-                            def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
+                            VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
+                            SUBNET_ID = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
+                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
+                            ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
                             
                             // Armazena os valores capturados em variáveis de ambiente para uso posterior
-                            env.VPC_ID = vpcId
-                            env.SUBNET_ID = subnetID
-                            env.ECS_SERVICE_NAME = ecsServiceName
-                            env.ECR_REPOSITORY_URL = ecrRepositoryUrl
+                            env.VPC_ID = VPC_ID
+                            env.SUBNET_ID = SUBNET_ID
+                            env.ECS_SERVICE_NAME = ECS_SERVICE_NAME
+                            env.ECR_REGISTRY_URL = ECR_REGISTRY_URL
         
                             // Opcional: Exibe os valores capturados no log do Jenkins para verificação
                             echo "Captured VPC ID: ${env.VPC_ID}"
@@ -52,8 +54,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage('Build Docker Image') {
             steps {
