@@ -20,7 +20,7 @@ resource "aws_subnet" "subnet_id_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "minha-subnet-a"
+    Name = "subnet_id_a"
   }
 }
 
@@ -28,6 +28,7 @@ resource "aws_subnet" "subnet_id_a" {
 output "subnet_id_a" {
   value = aws_subnet.subnet_id_a.id
 }
+
 
 
 # Security Group para o ALB e ECS
