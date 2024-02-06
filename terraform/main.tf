@@ -13,11 +13,26 @@ output "vpc_id" {
 }
 
 # Subnet
-resource "aws_subnet" "minha_subnet" {
-  vpc_id                  = aws_vpc.meu_vpc.id
-  cidr_block              = "10.0.0.0/24"  # Subnet CIDR
-  availability_zone       = "us-east-1a"   # Substitua pela zona de disponibilidade desejada
-  map_public_ip_on_launch = true           # Define se as instâncias lançadas nessa subnet terão IPs públicos
+resource "aws_subnet" "minha_subnet_a" {
+  vpc_id            = aws_vpc.meu_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "minha-subnet-a"
+  }
+}
+
+resource "aws_subnet" "minha_subnet_b" {
+  vpc_id            = aws_vpc.meu_vpc.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "us-east-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "minha-subnet-b"
+  }
 }
 
 # Output para a Subnet
