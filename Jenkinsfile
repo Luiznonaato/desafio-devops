@@ -28,19 +28,19 @@ pipeline {
 
 
                         /* Aplica as configurações do Terraform, criando ou atualizando recursos
-                        ssh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id_a=${env.SUBNET_ID_A}' -var 'ami_id=${env.AMI_ID}'"
+                        ssh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id=${env.subnet_id}' -var 'ami_id=${env.AMI_ID}'"
 
 
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         env.VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
-                        env.SUBNET_ID_A = sh(script: "terraform output -raw subnet_id_a", returnStdout: true).trim()
+                        env.subnet_id = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
                         env.AMI_ID = sh(script: "terraform output -raw ami_id", returnStdout: true).trim()
                         env.ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                         env.ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
 
                         // Opcional: Exibe os valores capturados no log do Jenkins para verificação
                         echo "Captured VPC ID: ${env.VPC_ID}"
-                        echo "Captured SUBNET ID A: ${env.SUBNET_ID_A}"
+                        echo "Captured SUBNET ID A: ${env.subnet_id}"
                         echo "Captured AMI ID: ${env.AMI_ID}"
                         echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                         echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
@@ -49,10 +49,10 @@ pipeline {
 
                         // Aplica as configurações do Terraform, criando ou atualizando recursos
                         // Assegure-se de que terraform apply é apropriado para o seu fluxo de CI/CD
-                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID_A}' -var 'vpc_id=${env.VPC_ID}' -var 'ami_id=${env.AMI_ID}'"
+                        sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'ami_id=${env.AMI_ID}'"
 
                         echo "VPC ID: ${env.VPC_ID}"
-                        echo "Subnet ID A: ${env.SUBNET_ID_A}"
+                        echo "Subnet ID A: ${env.subnet_id}"
 
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
@@ -63,14 +63,14 @@ pipeline {
 
                         // Define as variáveis de ambiente para uso posterior no pipeline
                         env.VPC_ID = vpcId
-                        env.SUBNET_ID_A = subnetIdA
+                        env.subnet_id = subnetIdA
                         env.AMI_ID = amiId
                         env.ECS_SERVICE_NAME = ecsServiceName
                         env.ECR_REGISTRY_URL = ecrRepositoryUrl
 
                         // Mostra os valores capturados para verificação
                         echo "Captured VPC ID: ${env.VPC_ID}"
-                        echo "Captured SUBNET ID A: ${env.SUBNET_ID_A}"
+                        echo "Captured SUBNET ID A: ${env.subnet_id}"
                         echo "Captured AMI ID: ${env.AMI_ID}"
                         echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
                         echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
