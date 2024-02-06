@@ -76,7 +76,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg.id]
-  subnets            = var.subnet_ids
+  subnets            = var.subnet_id
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
@@ -114,15 +114,15 @@ resource "aws_launch_template" "ecs_launch_template" {
   image_id      = var.ami_id
   instance_type = "t3.medium" 
 
+  output "ami_id" {
+    value = var.ami_id
+  }
+
   user_data = base64encode(<<-EOF
   #!/bin/bash
   echo ECS_CLUSTER=${aws_ecs_cluster.cluster.name} >> /etc/ecs/ecs.config
   EOF
   )
-  output "ami_id" {
-    value = var.ami_id
-  }
-
 
   lifecycle {
     create_before_destroy = true
