@@ -27,7 +27,7 @@ pipeline {
                                 sh 'terraform init'
 
                                 // Aplica as configurações do Terraform, criando ou atualizando recursos
-                                sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'ecs_service_name=${env.ecs_service_name}'"
+                                sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
 
                                 echo "VPC ID: ${env.VPC_ID}"
                                 echo "Subnet ID: ${env.subnet_id}"
