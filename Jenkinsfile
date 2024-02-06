@@ -52,7 +52,7 @@ pipeline {
                             echo "Captured SUBNET ID ID: ${env.SUBNET_ID}"
                             echo "Captured AMI ID ID: ${env.AMI_ID}"
                             echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
-                            echo "Captured ECR Repository URL: ${env.ECR_REPOSITORY_URL}"
+                            echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                         }
                     }
                 }
