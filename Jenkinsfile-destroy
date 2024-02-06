@@ -5,21 +5,21 @@ pipeline {
         AWS_DEFAULT_REGION = credentials('AWS_DEFAULT_REGION')
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        // Variáveis dinâmicas, definidas pelos outputs do Terraform
+        IMAGE_TAG = 'latest'
+        // As variáveis abaixo serão definidas dinamicamente com base nos outputs do Terraform
         ECR_REGISTRY_URL = ''
         ECS_CLUSTER_NAME = ''
-        ECS_SERVICE_NAME = '' // Adicionado para o nome do serviço ECS
-        IMAGE_TAG = 'latest'
+        ECS_SERVICE_NAME = ''
     }
 
     stages {
-        stage ("Checkout source") {
+        stage("Checkout source") {
             steps {
                 git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
-            }   
+            }
         }
 
-        stage ("Execução do terraform") {
+        stage("Execução do terraform") {
             steps {
                 script {
                     dir('terraform') {
@@ -29,14 +29,32 @@ pipeline {
                         script {
                             ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
                             ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
-                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim() // Captura o nome do serviço ECS
+                            ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                         }
                     }
                 }
             }
         }
 
-        // Stages de Build e Push da imagem Docker...
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Constrói a imagem Docker e a taggeia para o repositório ECR
+                    sh "docker build -t ${ECR_REGISTRY_URL}:${IMAGE_TAG} ."
+                }
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    // Faz login no Amazon ECR
+                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}"
+                    // Faz push da imagem para o repositório ECR
+                    sh "docker push ${ECR_REGISTRY_URL}:${IMAGE_TAG}"
+                }
+            }
+        }
 
         stage('Update ECS Service') {
             steps {
