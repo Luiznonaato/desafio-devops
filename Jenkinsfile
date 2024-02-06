@@ -20,27 +20,36 @@ pipeline {
             }
         }
 
-        stage("Execução do terraform") {
+        stage("Execução do Terraform") {
             steps {
                 script {
                     dir('terraform') {
+                        // Inicializa o Terraform
                         sh 'terraform init'
-                        // Assegura a passagem das variáveis de ambiente para o Terraform. Substitua pelos nomes corretos conforme necessário.
-                        sh """
-                          terraform plan -auto-approve -var "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -var "vpc_id=${VPC_ID}" -var 'subnet_ids=["id1","id2"]' -var "ami_id=${AMI_ID}" \\
-                          -var 'AWS_DEFAULT_REGION=\${AWS_DEFAULT_REGION}' \\
-                          -var 'vpc_id=\${VPC_ID}' \\
-                          -var 'subnet_ids=[\${SUBNET_IDS}]' \\
-                          -var 'ami_id=\${AMI_ID}'
-                        """
+                        // Aplica as configurações do Terraform, criando ou atualizando recursos
+                        sh 'terraform apply -auto-approve'
                         // Captura os outputs do Terraform
-                        ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
-                        ECS_CLUSTER_NAME = sh(script: "terraform output -raw ecs_cluster_name", returnStdout: true).trim()
-                        ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
+                        script {
+                            // O comando terraform output -raw é utilizado para capturar o valor de cada output
+                            def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
+                            def ecsServiceName = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
+                            def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
+                            
+                            // Armazena os valores capturados em variáveis de ambiente para uso posterior
+                            env.VPC_ID = vpcId
+                            env.ECS_SERVICE_NAME = ecsServiceName
+                            env.ECR_REPOSITORY_URL = ecrRepositoryUrl
+        
+                            // Opcional: Exibe os valores capturados no log do Jenkins para verificação
+                            echo "Captured VPC ID: ${env.VPC_ID}"
+                            echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
+                            echo "Captured ECR Repository URL: ${env.ECR_REPOSITORY_URL}"
+                        }
                     }
                 }
             }
         }
+
 
 
         stage('Build Docker Image') {
