@@ -135,7 +135,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   min_size         = 1
   max_size         = 10
   desired_capacity = 1
-  vpc_zone_identifier = var.subnet_ids
+  vpc_zone_identifier = var.subnet_id
 
   tag {
     key                 = "Server-app"
