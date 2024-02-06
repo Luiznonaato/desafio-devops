@@ -95,11 +95,18 @@ resource "aws_autoscaling_group" "ecs_asg" {
     propagate_at_launch = true
   }
 }
+
 /*
-# Registro DNS no Route53
-resource "aws_route53_record" "example" {
-  zone_id = "Z3P0J4S0N4J3K" # Substitua por seu Zone ID real
-  name    = "example.bluesoft.com.br"
+
+# Data source para a zona do Route53
+data "aws_route53_zone" "selected" {
+  name = var.zone_name
+}
+
+# Recurso para o registro no Route53
+resource "aws_route53_record" "desafio_devops" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = var.record_name
   type    = "A"
 
   alias {
@@ -108,7 +115,6 @@ resource "aws_route53_record" "example" {
     evaluate_target_health = true
   }
 }
-
 
 data "aws_route53_zone" "selected" {
   name         = "bluesoft.com.br."
