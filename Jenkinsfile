@@ -26,13 +26,14 @@ pipeline {
                         // Plano de execuçao (build)
                         sh '''
                         terraform plan \
+                          -var="ecr_repository_name=meu-nome-de-repositorio-customizado \
                           -var="AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" \
                           -var="ami_id=ami-0c02fb55956c7d316" \
                           -var='subnet_ids=["subnet-12345abcde", "subnet-67890fghij"]' \
                           -var="vpc_id=vpc-12345678"
                         '''
                         // Inicio execuçao (deploy)
-                        //sh 'terraform apply -auto-approve'
+                        // terraform apply -var="ecr_repository_name=meu-nome-de-repositorio-customizado"
                         // Destroy
                         // sh 'terraform destroy -auto-approve'
                     }
