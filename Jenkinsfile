@@ -27,7 +27,7 @@ pipeline {
                         sh 'terraform init'
                         // Assegura a passagem das variáveis de ambiente para o Terraform. Substitua pelos nomes corretos conforme necessário.
                         sh """
-                          terraform apply -auto-approve -var "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -var "vpc_id=${VPC_ID}" -var 'subnet_ids=["id1","id2"]' -var "ami_id=${AMI_ID}" \\
+                          terraform plan -auto-approve -var "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -var "vpc_id=${VPC_ID}" -var 'subnet_ids=["id1","id2"]' -var "ami_id=${AMI_ID}" \\
                           -var 'AWS_DEFAULT_REGION=\${AWS_DEFAULT_REGION}' \\
                           -var 'vpc_id=\${VPC_ID}' \\
                           -var 'subnet_ids=[\${SUBNET_IDS}]' \\
