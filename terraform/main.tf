@@ -30,6 +30,14 @@ output "subnet_id" {
   value = aws_subnet.subnet_id.id
 }
 
+resource "aws_instance" "aami_id" {
+  ami           = var.aami_id
+  instance_type = "t2.micro"
+  // Adicione mais configurações conforme necessário
+}
+output "aami_id" {
+  value       = var.aami_id
+}
 
 # Security Group para o ALB e ECS
 resource "aws_security_group" "sg" {
@@ -186,12 +194,6 @@ resource "aws_launch_template" "ecs_launch_template" {
     create_before_destroy = true
   }
 }
-
-output "aami_id" {
-  value       = var.aami_id
-  description = "O AMI ID usado para instâncias EC2"
-}
-
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "ecs_asg" {
