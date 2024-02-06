@@ -27,7 +27,7 @@ pipeline {
                                 sh 'terraform init'
 
                                 // Aplica as configurações do Terraform, criando ou atualizando recursos
-                                sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'ecs_service_name=${env.ECS_SERVICE_NAME}'"
+                                sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}' -var 'ecs_service_name=${env.ecs_service_name}'"
 
                                 echo "VPC ID: ${env.VPC_ID}"
                                 echo "Subnet ID: ${env.subnet_id}"
@@ -42,13 +42,13 @@ pipeline {
                                 // Define as variáveis de ambiente para uso posterior no pipeline
                                 env.VPC_ID = vpcId
                                 env.subnet_id = subnetIdA
-                                env.ECS_SERVICE_NAME = ecs_service_name
+                                env.ecs_service_name = ecs_service_name
                                 env.ECR_REGISTRY_URL = ecrRepositoryUrl
 
                                 // Mostra os valores capturados para verificação
                                 echo "Captured VPC ID: ${env.VPC_ID}"
                                 echo "Captured SUBNET ID: ${env.subnet_id}"
-                                echo "Captured ECS Service Name: ${env.ECS_SERVICE_NAME}"
+                                echo "Captured ECS Service Name: ${env.ecs_service_name}"
                                 echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                                 }
                             }
