@@ -126,7 +126,8 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 output "ecs_service_name" {
-  value = aws_ecs_service.meu_servico_ecs.name
+  description = "O nome do serviço ECS criado."
+  value       = aws_ecs_service.meu_servico_ecs.name
 }
 
 
