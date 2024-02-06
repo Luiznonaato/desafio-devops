@@ -27,11 +27,12 @@ pipeline {
                         sh 'terraform init'
 
                         // Aplica as configurações do Terraform, criando ou atualizando recursos
-                        sh "terraform plan -var='vpc_id=${env.VPC_ID}' -var='subnet_id_a=${env.SUBNET_ID_A}' -var='ami_id=${env.AMI_ID}'"
+                        ssh "terraform plan -var 'vpc_id=${env.VPC_ID}' -var 'subnet_id_a=${env.SUBNET_ID_A}' -var 'ami_id=${env.AMI_ID}'"
+
 
                         // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                         env.VPC_ID = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
-                       // env.SUBNET_ID_A = sh(script: "terraform output -raw subnet_id_a", returnStdout: true).trim()
+                        env.SUBNET_ID_A = sh(script: "terraform output -raw subnet_id_a", returnStdout: true).trim()
                         env.AMI_ID = sh(script: "terraform output -raw ami_id", returnStdout: true).trim()
                         env.ECS_SERVICE_NAME = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                         env.ECR_REGISTRY_URL = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
