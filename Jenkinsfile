@@ -30,7 +30,7 @@ pipeline {
                             script {
                                     def environment = "dev" 
                                     dir('terraform') {
-                                        sh "terraform plan -var-file=\"${environment}.tfvars\""
+                                        sh "terraform plan"
 
                                         /* Mostra os valores capturados para verificação
                                         echo "Captured VPC ID: ${env.VPC_ID}"
