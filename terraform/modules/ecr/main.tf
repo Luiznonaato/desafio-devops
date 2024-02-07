@@ -14,7 +14,7 @@ resource "aws_lb_target_group" "ecs_target_group" {
   name     = "ecs-target-group"
   port     = 8080
   protocol = "HTTP"
-  vpc_id   = vpc.meu_vpc.id
+  vpc_id   = var.vpc.vpc_id
 
   health_check {
     enabled             = true
