@@ -29,21 +29,15 @@ pipeline {
                         steps {
                             script {
                                     dir('terraform') {
-                                        sh "terraform plan 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
-                                        // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
-                                        def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
-                                        def subnetIdA = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
-                                        def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
-                                                        
-                                        // Define as variáveis de ambiente para uso posterior no pipeline
-                                        env.VPC_ID = vpcId
-                                        env.subnet_id = subnetIdA
-                                        env.ECR_REGISTRY_URL = ecrRepositoryUrl
+                                        sh "terraform plan \
+                                        -var 'subnet_id=${env.subnet_id}'
+                                        -var 'vpc_id=${env.vpc_id}'
+                                        -var 'ami_id=${env.ami_id}'"
 
-                                        // Mostra os valores capturados para verificação
+                                        /* Mostra os valores capturados para verificação
                                         echo "Captured VPC ID: ${env.VPC_ID}"
                                         echo "Captured SUBNET ID: ${env.subnet_id}"
-                                        echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
+                                        echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"*/
                                     }
                             }
                         }
