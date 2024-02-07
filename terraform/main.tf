@@ -115,14 +115,14 @@ resource "aws_ecs_service" "meu_servico_ecs" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = [aws_subnet.subnet_id.id] # Corrigido aqui
+    subnets         = [aws_subnet.subnet_id.id] 
     security_groups = [aws_security_group.sg.id]
     assign_public_ip = true
   }
 }
-# Cluster ECS
+
 resource "aws_ecs_cluster" "cluster" {
-  name = "meu-cluster-ecs"  # Substitua pelo nome desejado do cluster ECS
+  name = "meu-cluster-ecs" 
 }
 
 output "ecs_service_name" {
@@ -146,7 +146,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg.id]
-  subnets            = [aws_subnet.subnet_id.id] # Corrigido aqui
+  subnets            = [aws_subnet.subnet_id.id]
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
