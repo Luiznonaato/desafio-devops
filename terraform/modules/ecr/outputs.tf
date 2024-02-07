@@ -12,5 +12,5 @@ output "instance_id" {
 }
 
 output "ami_id" {
-  value = var.ami_id
+  value = var.ami_id.id
 }
