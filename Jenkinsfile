@@ -31,7 +31,7 @@ pipeline {
                                     //def environment = "dev" 
                                     dir('terraform') {
                                         sh "terraform plan"
-
+                                        AMI_ID = sh(script: "terraform output -raw modules.ecr.ami_id", returnStdout: true).trim()
                                         VPC_ID = sh(script: "terraform output -raw modules.vpc.vpc_id", returnStdout: true).trim()
                                         SUBNET_ID = sh(script: "terraform output -raw modules.vpc.subnet_id", returnStdout: true).trim()
                                         ECR_ID = sh(script: "terraform output -raw modules.repositorio.name", returnStdout: true).trim()
