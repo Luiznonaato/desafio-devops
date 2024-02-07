@@ -8,7 +8,7 @@ module "security_group" {
 }
 module "ecr" {
   source = "./modules/ecr"
-  //ami_id = "ami-0277155c3f0ab2930"
+  ami_id = "ami-0277155c3f0ab2930"
 }
 module "ecs" {
   source = "./modules/ecs"
