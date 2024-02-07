@@ -43,7 +43,7 @@ pipeline {
                                 //echo "Captured ECS Service Name: ${env.ecs_service_name}"
                                 echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                                 // Aplica as configurações do Terraform
-                                sh "terraform apply auto-approve 
+                                sh 'terraform apply auto-approve' 
                                 }
                             }
                     }
