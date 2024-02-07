@@ -17,6 +17,15 @@ module "ecs" {
   source = "./modules/ecs"
   // Parâmetros para o módulo ECS
 }
+
+module "alb" {
+  source = "./modules/alb"
+  // Parâmetros para o módulo ECS
+}
+module "route" {
+  source = "./modules/route"
+  // Parâmetros para o módulo ECS
+}
 module "alb" {
   source              = "./modules/alb"
   alb_name            = "meu-alb"
