@@ -12,15 +12,15 @@ module "ecr" {
 }
 module "ecs" {
   source = "./modules/ecs"
-  ami_id = ami_id.default
+  ami_id = "ami-0277155c3f0ab2930"
 }
 module "route" {
   source = "./modules/route"
 }
 module "alb" {
   source = "./modules/alb/"
-  security_groups = [module.security_group.security_group_id]
-  subnets         = [module.subnet.subnet_id] // Isso supõe que você tenha um módulo para subnet com um output `subnet_id`
+  security_groups = [module.security_group]
+  vpc         = [module.vpc] // Isso supõe que você tenha um módulo para subnet com um output `subnet_id`
 }
 
 

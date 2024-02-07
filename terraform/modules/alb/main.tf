@@ -4,7 +4,7 @@ variable "security_groups" {
   type        = list(string)
 }
 
-variable "subnets" {
+variable "vpc" {
   description = "List of subnet IDs to associate with the ALB"
   type        = list(string)
 }
@@ -14,7 +14,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.security_groups.security_group_id
-  subnets            = var.subnets.subnet_id
+  subnets            = var.vpc.subnet_id
 }
 
 resource "aws_lb_listener" "front_end" {
