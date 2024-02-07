@@ -28,11 +28,9 @@ pipeline {
                 stage("Terraform Plan") {
                         steps {
                             script {
+                                    def environment = "dev" 
                                     dir('terraform') {
-                                        sh "terraform plan \
-                                        -var 'subnet_id=${env.subnet_id}' \
-                                        -var 'vpc_id=${env.vpc_id}' \
-                                        -var 'ami_id=${env.ami_id}'"
+                                        sh "terraform plan -var -file=\"${environment}.tfvars\""
 
                                         /* Mostra os valores capturados para verificação
                                         echo "Captured VPC ID: ${env.VPC_ID}"
