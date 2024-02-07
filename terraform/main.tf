@@ -1,25 +1,25 @@
 module "vpc" {
-  source = "./modules/vpc/main.tf"
+  source = "./modules/vpc"
   // Parâmetros para o módulo VPC
 }
 module "security_group" {
-  source = "./modules/security_group/main.tf"
+  source = "./modules/security_group"
   // Parâmetros para o módulo Security Group
 }
 module "ecr" {
-  source = "./modules/ecr/main.tf"
+  source = "./modules/ecr"
   // Parâmetros para o módulo ECR
 }
 module "ecs" {
-  source = "./modules/ecs/main.tf"
+  source = "./modules/ecs"
   // Parâmetros para o módulo ECS
 }
 module "route" {
-  source = "./modules/route/main.tf"
+  source = "./modules/route"
   // Parâmetros para o módulo ECS
 }
 module "alb" {
-  source              = "./modules/alb/main.tf"
+  source              = "./modules/alb/"
   /*alb_name            = "meu-alb"
   security_groups     = [module.security_group.sg_id]
   subnets             = module.vpc.subnets
