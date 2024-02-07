@@ -17,16 +17,3 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.ecs_target_group.arn
   }
 }
-
-#Outputs
-output "alb_dns_name" {
-  value = aws_lb.alb.dns_name
-}
-
-output "alb_arn" {
-  value = aws_lb.alb.arn
-}
-
-output "listener_arn" {
-  value = aws_lb_listener.front_end.arn
-}
