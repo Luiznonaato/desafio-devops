@@ -25,30 +25,22 @@ pipeline {
                             dir('terraform') {
                                 // Inicializa o Terraform
                                 sh 'terraform init'
-
                                 // Aplica as configurações do Terraform, criando ou atualizando recursos
                                 sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
-
                                 // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                                 def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                                 def subnetIdA = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
-                                def ecsServiceName = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
+                                //def ecsServiceName = sh(script: "terraform output -raw ecs_service_name", returnStdout: true).trim()
                                 def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
-
-                                echo "VPC ID: ${env.VPC_ID}"
-                                echo "Subnet ID: ${env.subnet_id}"
-                                echo "Ecs service name: ${env.ecs_service_name}"
-
                                 // Define as variáveis de ambiente para uso posterior no pipeline
                                 env.VPC_ID = vpcId
                                 env.subnet_id = subnetIdA
-                                env.ecs_service_name = ecs_service_name
+                                //env.ecs_service_name = ecs_service_name
                                 env.ECR_REGISTRY_URL = ecrRepositoryUrl
-
                                 // Mostra os valores capturados para verificação
                                 echo "Captured VPC ID: ${env.VPC_ID}"
                                 echo "Captured SUBNET ID: ${env.subnet_id}"
-                                echo "Captured ECS Service Name: ${env.ecs_service_name}"
+                                //echo "Captured ECS Service Name: ${env.ecs_service_name}"
                                 echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                                 }
                             }
@@ -66,21 +58,21 @@ pipeline {
             }
 
             stage('Push Docker Image to ECR') {
-            steps {
-                script {
-                    // Faz login no Amazon ECR
-                    withCredentials([
-                        [$class: 'StringBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
-                        [$class: 'StringBinding', credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']
-                    ]) {
-                        // Utiliza o caminho completo para os comandos aws e docker
-                        sh "/usr/local/bin/aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
-                        // Faz push da imagem para o repositório ECR usando o caminho completo do Docker
-                        sh "/Users/luiznonato/.docker/bin/docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
+                steps {
+                    script {
+                        // Faz login no Amazon ECR
+                        withCredentials([
+                            [$class: 'StringBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
+                            [$class: 'StringBinding', credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']
+                        ]) {
+                            // Utiliza o caminho completo para os comandos aws e docker
+                            sh "/usr/local/bin/aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
+                            // Faz push da imagem para o repositório ECR usando o caminho completo do Docker
+                            sh "/Users/luiznonato/.docker/bin/docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
+                            }
                         }
                     }
                 }
-            }
 
             stage('Update ECS Service') {
                 steps {
