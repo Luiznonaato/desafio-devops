@@ -3,9 +3,6 @@ resource "aws_ecr_repository" "repositorio" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
 }
-output "ecr_repository_url" {
-  value = aws_ecr_repository.repositorio.repository_url
-}
 
 resource "aws_lb_target_group" "ecs_target_group" {
   name     = "ecs-target-group"
