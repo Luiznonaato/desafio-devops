@@ -32,12 +32,13 @@ pipeline {
                                     dir('terraform') {
                                         sh "terraform plan"
 
-                                        VPC_ID = sh(script: "terraform output -raw module.vpc.vpc_id", returnStdout: true).trim()
-                                        SUBNET_ID = sh(script: "terraform output -raw module.vpc.subnet_id", returnStdout: true).trim()
+                                        VPC_ID = sh(script: "terraform output -raw modules.vpc.vpc_id", returnStdout: true).trim()
+                                        SUBNET_ID = sh(script: "terraform output -raw modules.vpc.subnet_id", returnStdout: true).trim()
+                                        ECR_ID = sh(script: "terraform output -raw modules.repositorio.name", returnStdout: true).trim()
                                         
                                         echo "Captured VPC ID: ${VPC_ID}"
-                                        /*echo "Captured SUBNET ID: ${env.subnet_id}"
-                                        echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"*/
+                                        //echo "Captured SUBNET ID: ${env.subnet_id}"
+                                        echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
                                     }
                             }
                         }
