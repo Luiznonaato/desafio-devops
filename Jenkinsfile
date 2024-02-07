@@ -24,7 +24,6 @@ pipeline {
                                 }
                         }
                     }
-                
                 }
                 stage("Terraform Plan") {
                         steps {
