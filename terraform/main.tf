@@ -8,15 +8,15 @@ module "security_group" {
 }
 module "ecr" {
   source = "./modules/ecr"
-  // Parâmetros para o módulo ECR
+  ami_id = ami_id.default
+  ecr_repository_name = ecr_repository_name.default
 }
 module "ecs" {
   source = "./modules/ecs"
-  // Parâmetros para o módulo ECS
+  ami_id = ami_id.default
 }
 module "route" {
   source = "./modules/route"
-  // Parâmetros para o módulo ECS
 }
 module "alb" {
   source              = "./modules/alb/"
@@ -34,3 +34,5 @@ module "alb" {
   health_check_unhealthy_threshold = 2
   listener_port       = 8080*/
 }
+
+
