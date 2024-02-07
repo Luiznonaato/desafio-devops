@@ -21,5 +21,4 @@ module "alb" {
   source = "./modules/alb/"
   security_groups = [module.security_group]
   vpc         = [module.vpc.subnet_id]
-
-
+}
