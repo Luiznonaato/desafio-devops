@@ -2,17 +2,14 @@ module "vpc" {
   source = "./modules/vpc/main.tf"
   // Parâmetros para o módulo VPC
 }
-
 module "security_group" {
   source = "./modules/security_group/main.tf"
   // Parâmetros para o módulo Security Group
 }
-
 module "ecr" {
   source = "./modules/ecr/main.tf"
   // Parâmetros para o módulo ECR
 }
-
 module "ecs" {
   source = "./modules/ecs/main.tf"
   // Parâmetros para o módulo ECS

@@ -1,35 +1,3 @@
-/*resource "aws_ecs_cluster" "cluster" {
-  name = var.cluster_name
-}
-
-resource "aws_ecs_task_definition" "meu_task_definition" {
-  family                   = var.family
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = var.cpu
-  memory                   = var.memory
-  execution_role_arn       = var.execution_role_arn
-  container_definitions    = var.container_definitions
-}
-
-resource "aws_ecs_service" "meu_servico_ecs" {
-  name             = var.service_name
-  cluster          = aws_ecs_cluster.cluster.id
-  task_definition  = aws_ecs_task_definition.meu_task_definition.arn
-  desired_count    = var.desired_count
-  launch_type      = var.launch_type
-  network_configuration {
-    subnets         = var.subnets
-    security_groups = var.security_groups
-    assign_public_ip = var.assign_public_ip
-  }
-}
-
-output "ecs_service_name" {
-  description = "O nome do serviço ECS criado."
-  value       = aws_ecs_service.meu_servico_ecs.name
-}
-*/
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs_task_execution_role"
 
