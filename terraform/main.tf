@@ -20,7 +20,6 @@ module "route" {
 module "alb" {
   source = "./modules/alb/"
   security_groups = [module.security_group]
-  vpc         = [module.vpc] // Isso supõe que você tenha um módulo para subnet com um output `subnet_id`
-}
+  vpc         = [module.vpc.subnet_id]
 
 
