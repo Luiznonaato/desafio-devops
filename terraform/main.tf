@@ -20,7 +20,7 @@ module "route" {
 }
 module "alb" {
   source              = "./modules/alb/main.tf"
-  alb_name            = "meu-alb"
+  /*alb_name            = "meu-alb"
   security_groups     = [module.security_group.sg_id]
   subnets             = module.vpc.subnets
   target_group_name   = "ecs-target-group"
@@ -32,5 +32,5 @@ module "alb" {
   health_check_timeout = 5
   health_check_healthy_threshold = 2
   health_check_unhealthy_threshold = 2
-  listener_port       = 8080
+  listener_port       = 8080*/
 }
