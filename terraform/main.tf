@@ -12,7 +12,7 @@ module "ecr" {
 }
 module "ecs" {
   source = "./modules/ecs"
-  ami_id = ami_id.default
+  ami_id = "ami-0277155c3f0ab2930"
 }
 module "route" {
   source = "./modules/route"
