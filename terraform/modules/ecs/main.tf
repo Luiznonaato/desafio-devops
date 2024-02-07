@@ -1,3 +1,9 @@
+
+variable "vpc" {
+  description = "List of subnet IDs to associate with the ALB"
+  type        = list(string)
+}
+
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs_task_execution_role"
 

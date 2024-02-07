@@ -9,16 +9,18 @@ module "security_group" {
 module "ecr" {
   source = "./modules/ecr"
   ami_id = "ami-0277155c3f0ab2930"
+  vpc    = [module.vpc.vpc_id]
 }
 module "ecs" {
   source = "./modules/ecs"
   ami_id = "ami-0277155c3f0ab2930"
+  vpc    = [module.vpc.vpc_id]
 }
 module "route" {
   source = "./modules/route"
 }
 module "alb" {
-  source = "./modules/alb/"
+  source          = "./modules/alb/"
   security_groups = [module.security_group]
-  vpc         = [module.vpc.subnet_id]
+  vpc             = [module.vpc.subnet_id]
 }
