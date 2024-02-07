@@ -27,8 +27,6 @@ pipeline {
                                 sh 'terraform init'
                                 // Planeja as configurações do Terraform
                                 sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
-                                // Aplica as configurações do Terraform
-                                sh "terraform apply auto-approve -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
                                 // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                                 def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                                 def subnetIdA = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
@@ -44,6 +42,8 @@ pipeline {
                                 echo "Captured SUBNET ID: ${env.subnet_id}"
                                 //echo "Captured ECS Service Name: ${env.ecs_service_name}"
                                 echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
+                                // Aplica as configurações do Terraform
+                                sh "terraform apply auto-approve 
                                 }
                             }
                     }
