@@ -28,13 +28,15 @@ pipeline {
                 stage("Terraform Plan") {
                         steps {
                             script {
-                                    def environment = "dev" 
+                                    //def environment = "dev" 
                                     dir('terraform') {
                                         sh "terraform plan"
 
-                                        /* Mostra os valores capturados para verificação
-                                        echo "Captured VPC ID: ${env.VPC_ID}"
-                                        echo "Captured SUBNET ID: ${env.subnet_id}"
+                                        VPC_ID = sh(script: "terraform output -raw module.vpc.vpc_id", returnStdout: true).trim()
+                                        SUBNET_ID = sh(script: "terraform output -raw module.vpc.subnet_id", returnStdout: true).trim()
+                                        
+                                        echo "Captured VPC ID: ${VPC_ID}"
+                                        /*echo "Captured SUBNET ID: ${env.subnet_id}"
                                         echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"*/
                                     }
                             }
