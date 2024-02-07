@@ -1,39 +1,43 @@
 pipeline {
     agent any
-    
-        environment {
-            // A definição das credenciais AWS será feita no bloco 'withCredentials'
-            AWS_DEFAULT_REGION = 'us-east-1'
-            PATH = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
-            IMAGE_TAG = 'latest'
-        }
-        stages {
-            stage("Checkout source") {
-                steps {
-                    git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
+
+            environment {
+                // A definição das credenciais AWS será feita no bloco 'withCredentials'
+                AWS_DEFAULT_REGION    = 'us-east-1'
+                AWS_DEFAULT_REGION    = credentials('AWS_DEFAULT_REGION')
+                AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+                PATH                  = "/opt/homebrew/bin:$PATH" // Adiciona o caminho do Terraform ao PATH
+                IMAGE_TAG             = 'latest'
+            }
+            stages {
+                stage("Checkout source") {
+                    steps {
+                        git url: 'https://github.com/Luiznonaato/desafio-devops.git', branch: 'main'
+                    }
+                }
+                stage("Terraform Init") {
+                    steps {
+                        script {
+                                dir('terraform') {
+                                    // Inicializa o Terraform
+                                    sh 'terraform init'
+                                }
+                        }
+                    }
+                
                 }
             }
-
-            stage("Execução do Terraform") {
+            stage("Terraform Plan") {
                 steps {
                     script {
-                        withCredentials([
-                            [$class: 'StringBinding', credentialsId: 'AWS_DEFAULT_REGION', variable: 'AWS_DEFAULT_REGION'],
-                            [$class: 'StringBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
-                            [$class: 'StringBinding', credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']
-                        ]) {
                             dir('terraform') {
-                                // Inicializa o Terraform
-                                sh 'terraform init'
-
-                                //sh "terraform plan -var 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
                                 sh "terraform plan 'subnet_id=${env.SUBNET_ID}' -var 'vpc_id=${env.VPC_ID}'"
-
                                 // Captura os outputs do Terraform e armazena em variáveis de ambiente no Jenkins
                                 def vpcId = sh(script: "terraform output -raw vpc_id", returnStdout: true).trim()
                                 def subnetIdA = sh(script: "terraform output -raw subnet_id", returnStdout: true).trim()
                                 def ecrRepositoryUrl = sh(script: "terraform output -raw ecr_repository_url", returnStdout: true).trim()
-                                
+                                                
                                 // Define as variáveis de ambiente para uso posterior no pipeline
                                 env.VPC_ID = vpcId
                                 env.subnet_id = subnetIdA
@@ -43,11 +47,11 @@ pipeline {
                                 echo "Captured VPC ID: ${env.VPC_ID}"
                                 echo "Captured SUBNET ID: ${env.subnet_id}"
                                 echo "Captured ECR Repository URL: ${env.ECR_REGISTRY_URL}"
-                                }
                             }
                     }
                 }
             }
+            
 
             stage('Build Docker Image') {
                 steps {
@@ -70,10 +74,10 @@ pipeline {
                             sh "/usr/local/bin/aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${env.ECR_REGISTRY_URL}"
                             // Faz push da imagem para o repositório ECR usando o caminho completo do Docker
                             sh "/Users/luiznonato/.docker/bin/docker push ${env.ECR_REGISTRY_URL}:${env.IMAGE_TAG}"
-                            }
                         }
                     }
                 }
+            }
 
             stage('Update ECS Service') {
                 steps {
@@ -83,6 +87,4 @@ pipeline {
                     }
                 }
             }
-        }
 }
-

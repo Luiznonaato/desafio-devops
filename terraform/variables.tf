@@ -3,8 +3,18 @@ variable "AWS_DEFAULT_REGION" {
   type        = string
   default     = "us-east-1"
 }
+variable "ami_id" {
+  description = "AMI ID para as instâncias EC2"
+  type        = string
+  default     = "ami-0277155c3f0ab2930"  
+}
+variable "ecr_repository_name" {
+  description = "O nome do repositório ECR."
+  type        = string
+  default     = "repositorio" 
+}
 
-
+/*
 variable "vpc_id" {
   description = "O ID da VPC"
   type        = string
@@ -15,13 +25,6 @@ variable "subnet_id" {
   type        = string
   //default     = "subnetid"
 }
-
-variable "ami_id" {
-  description = "AMI ID para as instâncias EC2"
-  type        = string
-  default     = "ami-0277155c3f0ab2930"  
-}
-
 
 variable "app_dns_name" {
   description = "O nome DNS para o registro no Route53 apontando para o ALB"
@@ -41,9 +44,6 @@ variable "record_name" {
   default     = "desafio-devops.bluesoft.com.br"
 }
 
-variable "ecr_repository_name" {
-  description = "O nome do repositório ECR."
-  type        = string
-  default     = "repositorio" 
-}
 
+
+*/
