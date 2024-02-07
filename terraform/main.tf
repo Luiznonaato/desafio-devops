@@ -14,7 +14,7 @@ module "ecr" {
 module "ecs" {
   source = "./modules/ecs"
   ami_id = "ami-0277155c3f0ab2930"
-  vpc    = [module.vpc.vpc_id]
+  vpc    = [module.vpc.meu_vpc]
 }
 module "route" {
   source = "./modules/route"
