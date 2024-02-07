@@ -30,8 +30,8 @@ pipeline {
                             script {
                                     dir('terraform') {
                                         sh "terraform plan \
-                                        -var 'subnet_id=${env.subnet_id}'
-                                        -var 'vpc_id=${env.vpc_id}'
+                                        -var 'subnet_id=${env.subnet_id}' \
+                                        -var 'vpc_id=${env.vpc_id}' \
                                         -var 'ami_id=${env.ami_id}'"
 
                                         /* Mostra os valores capturados para verificação
