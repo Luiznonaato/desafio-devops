@@ -12,26 +12,29 @@ pipeline {
     stages {
         stage('Preparar') {
             steps {
-               // dir(env.TERRAFORM_REPO_PATH) {
-                  //  sh 'echo Preparando o Terraform'
+                dir(env.TERRAFORM_REPO_PATH) {
+                sh 'echo Preparando o Terraform'
                 }
             }
         
 
         stage('Terraform Init') {
             steps {
-              //  dir(env.TERRAFORM_REPO_PATH) {
-                //    sh 'terraform init'
+                dir(env.TERRAFORM_REPO_PATH) {
+                sh 'terraform init'
                 }
             }
-        
+        }
 
         stage('Terraform Apply') {
             steps {
-               // dir(env.TERRAFORM_REPO_PATH) {
-                    //sh 'terraform apply -auto-approve'
+                dir(env.TERRAFORM_REPO_PATH) {
+                sh 'terraform apply -auto-approve'
                 }
-            }
+                }
+            }  
+        
+        }
     }
 }
 
