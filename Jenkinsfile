@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Definindo a variável de ambiente diretamente no Jenkinsfile
-        TERRAFORM_REPO_PATH = "/opt/homebrew/bin/terraform"
+        //TERRAFORM_REPO_PATH = "/opt/homebrew/bin/terraform"
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         AWS_DEFAULT_REGION = 'us-east-1'
@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Preparar') {
             steps {
-                dir(env.TERRAFORM_REPO_PATH) {
+               // dir(env.TERRAFORM_REPO_PATH) {
                     sh 'echo Preparando o Terraform'
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                dir(env.TERRAFORM_REPO_PATH) {
+              //  dir(env.TERRAFORM_REPO_PATH) {
                     sh 'terraform init'
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                dir(env.TERRAFORM_REPO_PATH) {
+               // dir(env.TERRAFORM_REPO_PATH) {
                     //sh 'terraform apply -auto-approve'
                 }
             }
