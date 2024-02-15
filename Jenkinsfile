@@ -16,7 +16,7 @@ pipeline {
                 sh 'echo Preparando o Terraform'
                 }
             }
-        
+        }
 
         stage('Terraform Init') {
             steps {
@@ -36,5 +36,5 @@ pipeline {
         
         }
     }
-}
+
 
