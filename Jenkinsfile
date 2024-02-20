@@ -7,6 +7,7 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         AWS_DEFAULT_REGION = 'us-east-1'
         PATH = "${env.PATH}:/opt/homebrew/bin"
+        IMAGE_TAG = 'latest'
     }
 
     stages {
@@ -32,6 +33,29 @@ pipeline {
                     sh 'terraform plan'
                 }
             }  
+        }
+
+        stage('Construir Imagem Docker') {
+            steps {
+                // Comandos para construir a imagem Docker da sua aplicação
+                sh 'docker build -t minha-aplicacao:${IMAGE_TAG} .'
+            }
+        }
+
+        stage('Push para ECR') {
+            steps {
+                // Comandos para fazer push da imagem para o Amazon ECR
+                sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
+                sh 'docker tag minha-aplicacao:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
+                sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
+            }
+        }
+
+        stage('Atualizar Serviço ECS') {
+            steps {
+                // Comandos para atualizar o serviço ECS com a nova imagem
+                sh 'aws ecs update-service --cluster meu-cluster --service meu-servico --force-new-deployment'
+            }
         }
     }
 }
