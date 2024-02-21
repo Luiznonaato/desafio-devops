@@ -38,7 +38,7 @@ pipeline {
         stage('Construir Imagem Docker') {
             steps {
                 // Comandos para construir a imagem Docker da sua aplicação
-                env.PATH = "/Users/luiznonato/.docker/bin:" + env.PATH
+                env.PATH2 = "/Users/luiznonato/.docker/bin:" + env.PATH2
                 sh 'docker build -t minha-aplicacao:${IMAGE_TAG} .'
             }
         }
