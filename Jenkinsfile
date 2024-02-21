@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Correctly setting the environment variable within a script block
-                    env.PATH = "/Users/luiznonato/.docker/bin" + env.PATH
+                    env.PATH = "/Users/luiznonato/.docker/bin:" + env.PATH
                 }
                 // Execute the docker build command with the adjusted PATH
                 sh 'docker build -t minha-aplicacao:${IMAGE_TAG} .'
