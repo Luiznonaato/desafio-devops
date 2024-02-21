@@ -37,12 +37,13 @@ pipeline {
 
         stage('Construir Imagem Docker') {
             steps {
-                /*script {
+                script {
                     // Correctly setting the environment variable within a script block
-                    env.PATH2 = "//Users/luiznonato/.docker/bin/docker:" + env.PATH
-                }*/
+                    env.PATH2 = "/Users/luiznonato/.docker/bin/docker" + env.PATH
+                }
                 // Execute the docker build command with the adjusted PATH
-                sh '/Users/luiznonato/.docker/bin/docker build -t minha-aplicacao:${IMAGE_TAG} .'
+                sh 'build -t minha-aplicacao:${IMAGE_TAG} .'
+                //sh '/Users/luiznonato/.docker/bin/docker build -t minha-aplicacao:${IMAGE_TAG} .'
             }
         }
 
@@ -51,8 +52,8 @@ pipeline {
             steps {
                 // Comandos para fazer push da imagem para o Amazon ECR
                 sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
-                sh '/Users/luiznonato/.docker/bin/docker tag minha-aplicacao:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
-                sh '/Users/luiznonato/.docker/bin/docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
+                sh 'docker tag minha-aplicacao:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
+                sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
             }
         }
 
