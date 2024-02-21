@@ -37,11 +37,15 @@ pipeline {
 
         stage('Construir Imagem Docker') {
             steps {
-                // Comandos para construir a imagem Docker da sua aplicação
-                env.PATH2 = "/Users/luiznonato/.docker/bin:" + env.PATH2
+                script {
+                    // Correctly setting the environment variable within a script block
+                    env.PATH2 = "/Users/luiznonato/.docker/bin:" + env.PATH
+                }
+                // Execute the docker build command with the adjusted PATH
                 sh 'docker build -t minha-aplicacao:${IMAGE_TAG} .'
             }
         }
+
 
         stage('Push para ECR') {
             steps {
