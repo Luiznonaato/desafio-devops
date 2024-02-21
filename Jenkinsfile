@@ -42,7 +42,7 @@ pipeline {
                     env.PATH2 = "//Users/luiznonato/.docker/bin/docker:" + env.PATH
                 }*/
                 // Execute the docker build command with the adjusted PATH
-                sh '/Users/luiznonato/.docker/bin/docker: build -t minha-aplicacao:${IMAGE_TAG} .'
+                sh '/Users/luiznonato/.docker/bin/docker build -t minha-aplicacao:${IMAGE_TAG} .'
             }
         }
 
