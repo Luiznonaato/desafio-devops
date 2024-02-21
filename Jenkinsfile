@@ -44,12 +44,13 @@ pipeline {
 
         stage('Push para ECR') {
             steps {
-                // Comandos para fazer push da imagem para o Amazon ECR
-                sh '/usr/local/bin/aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
+                // Assuming AWS CLI is correctly invoked now, use the full path for Docker commands as well
+                sh '/usr/local/bin/aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
                 sh '/Users/luiznonato/.docker/bin/docker tag minha-aplicacao:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
                 sh '/Users/luiznonato/.docker/bin/docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}'
             }
         }
+
 
         stage('Atualizar Serviço ECS') {
             steps {
