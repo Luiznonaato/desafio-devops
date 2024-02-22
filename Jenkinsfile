@@ -55,7 +55,6 @@ pipeline {
                 script {
                     echo "AWS Account ID: ${env.AWS_ACCOUNT_ID}"
                     echo "AWS Default Region: ${env.AWS_DEFAULT_REGION}"
-                    echo "AWS Access key: ${env.AWS_ACCESS_KEY_ID}"
                 }
             }
         }
