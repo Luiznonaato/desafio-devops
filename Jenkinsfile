@@ -36,6 +36,14 @@ pipeline {
             }  
         }
 
+        stage('Terraform Aply') {
+            steps {
+                dir("${TERRAFORM_FILES_PATH}") {
+                    sh 'terraform apply -auto-approve'
+                }
+            }  
+        }
+
         stage('Construir Imagem Docker') {
             steps {
                 sh '/Users/luiznonato/.docker/bin/docker build -t minha-aplicacao:${IMAGE_TAG} .'
