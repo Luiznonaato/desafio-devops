@@ -36,10 +36,10 @@ pipeline {
             }  
         }
 
-        stage('Terraform Aply') {
+        stage('Terraform Destroy') {
             steps {
                 dir("${TERRAFORM_FILES_PATH}") {
-                    sh 'terraform apply -auto-approve'
+                    sh 'terraform destroy -auto-approve'
                 }
             }  
         }
