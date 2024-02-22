@@ -56,8 +56,8 @@ pipeline {
             steps {
             retry(3) {
                 sh "/usr/local/bin/aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | /Users/luiznonato/.docker/bin/docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                sh "/Users/luiznonato/.docker/bin/docker tag minha-aplicacao:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}"
-                sh "/Users/luiznonato/.docker/bin/docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:${IMAGE_TAG}"
+                sh "/Users/luiznonato/.docker/bin/docker tag minha-aplicacao:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:latest"
+                sh "/Users/luiznonato/.docker/bin/docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/minha-aplicacao:latest"
             }
          }
         }
