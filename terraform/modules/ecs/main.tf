@@ -94,7 +94,7 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
 
 resource "aws_ecs_task_definition" "my_task" {
   family                   = "my-task-Bluesoft"
-  network_mode             = "bridge"
+  network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
   cpu                      = "256"
   memory                   = "512"
