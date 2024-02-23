@@ -17,6 +17,12 @@ pipeline {
                 sh 'terraform init'
             }
         }
+    stages {
+        stage('Terraform State') {
+            steps {
+                sh 'terraform terraform state list'
+            }
+        }
 
         stage('Terraform Destroy') {
             steps {
