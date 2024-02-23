@@ -36,14 +36,22 @@ pipeline {
             }  
         }
 
-       /* stage('Terraform Apply') {
+        stage('Terraform Apply') {
             steps {
                 dir("${TERRAFORM_FILES_PATH}") {
                     sh 'terraform apply -auto-approve'
                 }
             }  
         }
-*/
+
+        stage('Terraform Destroy') {
+            steps {
+                dir("${TERRAFORM_FILES_PATH}") {
+                    sh 'terraform destroy -auto-approve'
+                }
+            }  
+        }
+
         stage('Construir Imagem Docker') {
             steps {
                 sh '/Users/luiznonato/.docker/bin/docker build -t desafio:${IMAGE_TAG} .'
