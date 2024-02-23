@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        TERRAFORM_FILES_PATH = "terraform"
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_ACCOUNT_ID = '339713028644'
+        PATH = "${env.PATH}:/opt/homebrew/bin"
+        IMAGE_TAG = 'latest'
+    }
+
+    stages /*{
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+*/
+        stage('Terraform Destroy') {
+            steps {
+                // Substitua 'your-workspace' pelo workspace do Terraform, se necessário
+                script {
+                    def userInput = input(id: 'confirmDestroy', message: 'Você realmente deseja destruir a infraestrutura?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Confirme a destruição', name: 'confirm']])
+                    if (userInput) {
+                        sh 'terraform destroy -auto-approve'
+                    } else {
+                        echo 'Destruição cancelada pelo usuário.'
+                    }
+                }
+            }
+        }
+    }
+}
