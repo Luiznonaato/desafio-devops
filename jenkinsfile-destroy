@@ -17,16 +17,15 @@ pipeline {
                 sh 'terraform init'
             }
         }
-    stages {
+        
         stage('Terraform State') {
             steps {
-                sh 'terraform terraform state list'
+                sh 'terraform state list'
             }
         }
 
         stage('Terraform Destroy') {
             steps {
-                // Substitua 'your-workspace' pelo workspace do Terraform, se necessário
                 script {
                     def userInput = input(id: 'confirmDestroy', message: 'Você realmente deseja destruir a infraestrutura?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Confirme a destruição', name: 'confirm']])
                     if (userInput) {
